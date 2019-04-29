@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.topic.IDynaTopicStatMapper">
+    <resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.topic.DynaTopicStatDTO">
+        <id column="dyna_topic_stat_id" jdbcType="INTEGER" property="dynaTopicStatId"/>
+                <result column="dyna_topic_id" jdbcType="INTEGER" property="dynaTopicId"/>
+                <result column="num_view" jdbcType="INTEGER" property="numView"/>
+                <result column="num_comment" jdbcType="INTEGER" property="numComment"/>
+                <result column="num_reply" jdbcType="INTEGER" property="numReply"/>
+                <result column="num_total" jdbcType="INTEGER" property="numTotal"/>
+                <result column="first_user_id" jdbcType="INTEGER" property="firstUserId"/>
+                <result column="second_user_id" jdbcType="INTEGER" property="secondUserId"/>
+                <result column="third_user_id" jdbcType="INTEGER" property="thirdUserId"/>
+                <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+                <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+                <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+                <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+            </resultMap>
+
+    <select id="findById" resultMap="dtoMap">
+        <![CDATA[
+        select * from dyna_topic_stat  where dyna_topic_stat_id = #{dynaTopicStatId}
+        ]]>
+    </select>
+
+    <insert id="add" parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicStatDTO" useGeneratedKeys="true" keyProperty="dyna_topic_stat_id">
+        <![CDATA[
+        insert into `dyna_topic_stat`(
+                `dyna_topic_id`
+                ,`num_view`
+                ,`num_comment`
+                ,`num_reply`
+                ,`num_total`
+                ,`first_user_id`
+                ,`second_user_id`
+                ,`third_user_id`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                )values(
+                #{dynaTopicId}
+                ,#{numView}
+                ,#{numComment}
+                ,#{numReply}
+                ,#{numTotal}
+                ,#{firstUserId}
+                ,#{secondUserId}
+                ,#{thirdUserId}
+                ,#{createTime}
+                ,#{createBy}
+                ,#{modifyTime}
+                ,#{modifyBy}
+                )
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicStatDTO">
+        <![CDATA[
+        update `dyna_topic_stat` set
+                            `dyna_topic_id`=#{dynaTopicId}
+                ,            `num_view`=#{numView}
+                ,            `num_comment`=#{numComment}
+                ,            `num_reply`=#{numReply}
+                ,            `num_total`=#{numTotal}
+                ,            `first_user_id`=#{firstUserId}
+                ,            `second_user_id`=#{secondUserId}
+                ,            `third_user_id`=#{thirdUserId}
+                ,            `create_time`=#{createTime}
+                ,            `create_by`=#{createBy}
+                ,            `modify_time`=#{modifyTime}
+                ,            `modify_by`=#{modifyBy}
+                where dyna_topic_stat_id=#{dynaTopicStatId}
+        ]]>
+    </update>
+
+    <delete id="deleteDynaTopicStat">
+        <![CDATA[
+        delete from `dyna_topic_stat` where dyna_topic_stat_id=#{id}
+        ]]>
+    </delete>
+
+    <select id="query" resultMap="dtoMap"  parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicStatDTO">
+        select `dyna_topic_stat_id`
+                ,`dyna_topic_id`
+                ,`num_view`
+                ,`num_comment`
+                ,`num_reply`
+                ,`num_total`
+                ,`first_user_id`
+                ,`second_user_id`
+                ,`third_user_id`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                from `dyna_topic_stat`
+        <where>
+                <if test="numView != null  and '' != numView  ">
+              num_view = #{numView}
+        </if>
+                <if test="numComment != null  and '' != numComment  ">
+             and   num_comment = #{numComment}
+        </if>
+                <if test="numReply != null  and '' != numReply  ">
+             and   num_reply = #{numReply}
+        </if>
+                <if test="numTotal != null  and '' != numTotal  ">
+             and   num_total = #{numTotal}
+        </if>
+                </where>
+        order by `dyna_topic_stat_id` desc
+    </select>
+
+    <select id="findByTopicId" resultMap="dtoMap" >
+        select `dyna_topic_stat_id`
+        ,`dyna_topic_id`
+        ,`num_view`
+        ,`num_comment`
+        ,`num_reply`
+        ,`num_total`
+        ,`first_user_id`
+        ,`second_user_id`
+        ,`third_user_id`
+        from `dyna_topic_stat`
+        where dyna_topic_id = #{topicId}
+    </select>
+
+    <select id="batchGetStatByTopicId" resultMap="dtoMap"  parameterType="java.util.Set">
+        select `dyna_topic_stat_id`
+        ,`dyna_topic_id`
+        ,`num_view`
+        ,`num_comment`
+        ,`num_reply`
+        ,`num_total`
+        ,`first_user_id`
+        ,`second_user_id`
+        ,`third_user_id`
+        from `dyna_topic_stat`
+        where dyna_topic_id in
+        <foreach item="item" index="index" collection="topicIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

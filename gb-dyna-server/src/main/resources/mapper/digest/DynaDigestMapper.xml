@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.digest.IDynaDigestMapper">
+    <resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.digest.DynaDigestDTO">
+        <id column="dyna_digest_id" jdbcType="INTEGER" property="dynaDigestId"/>
+        <result column="book_user_id" jdbcType="INTEGER" property="bookUserId"/>
+        <result column="digest_content" jdbcType="VARCHAR" property="digestContent"/>
+        <result column="book_prop_id" jdbcType="INTEGER" property="bookPropId"/>
+        <result column="image_path" jdbcType="VARCHAR" property="imagePath"/>
+        <result column="publish_status" jdbcType="INTEGER" property="publishStatus"/>
+        <result column="publish_date" jdbcType="INTEGER" property="publishDate"/>
+        <result column="num_support" jdbcType="INTEGER" property="numSupport"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+        <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+    </resultMap>
+
+    <resultMap id="listDtoMap" type="com.geeboo.dyna.server.client.dto.digest.DynaDigestListDTO">
+        <id column="dyna_digest_id" jdbcType="INTEGER" property="dynaDigestId"/>
+        <result column="book_user_id" jdbcType="INTEGER" property="bookUserId"/>
+        <result column="digest_content" jdbcType="VARCHAR" property="digestContent"/>
+        <result column="book_prop_id" jdbcType="INTEGER" property="bookPropId"/>
+        <result column="image_path" jdbcType="VARCHAR" property="imagePath"/>
+        <result column="publish_status" jdbcType="INTEGER" property="publishStatus"/>
+        <result column="num_support" jdbcType="INTEGER" property="numSupport"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+    </resultMap>
+
+    <select id="getDigestPage" resultMap="listDtoMap" parameterType="com.geeboo.dyna.server.client.dto.digest.DynaDigestListDTO">
+        select
+        dyna_digest_id,
+        book_user_id,
+        digest_content,
+        image_path,
+        num_support,
+        book_prop_id,
+        create_time,
+        publish_status
+        from dyna_digest
+        <where>
+            <if test="publishStatus !=null">
+                publish_status = #{publishStatus}
+            </if>
+        </where>
+        order by dyna_digest_id desc
+    </select>
+
+    <select id="findById" resultMap="dtoMap">
+        <![CDATA[
+
+
+        select * from dyna_digest  where dyna_digest_id = #{dynaDigestId}
+
+
+        ]]>
+    </select>
+
+    <insert id="add" parameterType="com.geeboo.dyna.server.client.dto.digest.DynaDigestDTO" useGeneratedKeys="true"
+            keyProperty="dyna_digest_id">
+        <![CDATA[
+
+
+        insert into `dyna_digest`(
+                `book_user_id`
+                ,`digest_content`
+                ,`book_prop_id`
+                ,`image_path`
+                ,`publish_status`
+                ,`publish_date`
+                ,`num_support`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                )values(
+                #{bookUserId}
+                ,#{digestContent}
+                ,#{bookPropId}
+                ,#{imagePath}
+                ,#{publishStatus}
+                ,#{publishDate}
+                ,#{numSupport}
+                ,#{createTime}
+                ,#{createBy}
+                ,#{modifyTime}
+                ,#{modifyBy}
+                )
+
+
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.digest.DynaDigestDTO">
+        <![CDATA[
+        update `dyna_digest`
+        set
+             `book_user_id`=#{bookUserId}
+            ,`digest_content`=#{digestContent}
+            ,`book_prop_id`=#{bookPropId}
+            ,`image_path`=#{imagePath}
+            ,`publish_status`=#{publishStatus}
+            ,`publish_date`=#{publishDate}
+            ,`num_support`=#{numSupport}
+            ,`create_time`=#{createTime}
+            ,`create_by`=#{createBy}
+            ,`modify_time`=#{modifyTime}
+            ,`modify_by`=#{modifyBy}
+        where dyna_digest_id=#{dynaDigestId}
+        ]]>
+    </update>
+
+    <delete id="remove">
+        <![CDATA[
+
+
+        delete from `dyna_digest` where dyna_digest_id=#{dynaDigestId}
+
+
+        ]]>
+    </delete>
+
+    <select id="query" resultMap="dtoMap" parameterType="com.geeboo.dyna.server.client.dto.digest.DynaDigestDTO">
+        <include refid="sql_query"/>
+    </select>
+
+    <select id="findByCondition" resultMap="dtoMap" parameterType="com.geeboo.dyna.server.client.dto.digest.DynaDigestDTO">
+        <include refid="sql_query"/>
+        limit 1
+    </select>
+
+    <sql id="sql_query">
+        select `dyna_digest_id`
+        ,`book_user_id`
+        ,`digest_content`
+        ,`book_prop_id`
+        ,`image_path`
+        ,`publish_status`
+        ,`publish_date`
+        ,`num_support`
+        ,`create_time`
+        ,`create_by`
+        ,`modify_time`
+        ,`modify_by`
+        from `dyna_digest`
+        <where>
+            <if test="digestContent != null  and '' != digestContent  ">
+                digest_content = #{digestContent}
+            </if>
+            <if test="publishStatus != null  ">
+                and publish_status = #{publishStatus}
+            </if>
+        </where>
+        order by `dyna_digest_id` desc
+    </sql>
+
+    <update id="incrementNumSupport">
+        update dyna_digest
+        <set>
+            <choose>
+                <when test="isFavor == 0">
+                    num_support = (num_support -1)
+                </when>
+                <when test="isFavor == 1">
+                    num_support = (num_support +1)
+                </when>
+            </choose>
+        </set>
+        where dyna_digest_id = #{dynaDigestId}
+    </update>
+
+
+</mapper>

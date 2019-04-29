@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.squire.IDynaSquireMapper">
+    <resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.squire.DynaSquireDTO">
+        <id column="dyna_squire_id" jdbcType="INTEGER" property="dynaSquireId"/>
+        <id column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="book_user_id" jdbcType="INTEGER" property="bookUserId"/>
+        <result column="squire_bus_type" jdbcType="TINYINT" property="squireBusType"/>
+        <result column="business_id" jdbcType="INTEGER" property="businessId"/>
+        <result column="book_name" jdbcType="VARCHAR" property="bookName"/>
+        <result column="cover_path" jdbcType="VARCHAR" property="coverPath"/>
+        <result column="book_author" jdbcType="VARCHAR" property="bookAuthor"/>
+        <result column="select_content" jdbcType="VARCHAR" property="selectContent"/>
+        <result column="comment_content" jdbcType="VARCHAR" property="commentContent"/>
+        <result column="book_score" jdbcType="TINYINT" property="bookScore"/>
+        <result column="num_favor" jdbcType="INTEGER" property="numFavor"/>
+        <result column="num_reply" jdbcType="INTEGER" property="numReply"/>
+        <result column="is_disp" jdbcType="TINYINT" property="isDisp"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+        <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+
+        <result column="is_sensitive" jdbcType="INTEGER" property="isSensitive"/>
+    </resultMap>
+
+    <select id="findById" resultMap="dtoMap">
+        <![CDATA[
+
+
+        select * from dyna_squire  where dyna_squire_id = #{dynaSquireId}
+
+
+        ]]>
+    </select>
+
+    <insert id="add" parameterType="com.geeboo.dyna.server.client.dto.squire.DynaSquireDTO" useGeneratedKeys="true"
+            keyProperty="dynaSquireId">
+        <![CDATA[
+
+
+        insert into `dyna_squire`(
+                `book_user_id`
+                ,`user_id`
+                ,`squire_bus_type`
+                ,`business_id`
+                ,`book_name`
+                ,`cover_path`
+                ,`book_author`
+                ,`select_content`
+                ,`comment_content`
+                ,`book_score`
+                ,`num_favor`
+                ,`num_reply`
+                ,`is_disp`
+                ,`is_del`
+                ,`is_sensitive`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                )values(
+                #{bookUserId}
+                ,#{userId}
+                ,#{squireBusType}
+                ,#{businessId}
+                ,#{bookName}
+                ,#{coverPath}
+                ,#{bookAuthor}
+                ,#{selectContent}
+                ,#{commentContent}
+                ,#{bookScore}
+                ,#{numFavor}
+                ,#{numReply}
+                ,#{isDisp}
+                ,#{isDel}
+                 ,#{isSensitive}
+                ,#{createTime}
+                ,#{createBy}
+                ,#{modifyTime}
+                ,#{modifyBy}
+                )
+
+
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.squire.DynaSquireDTO">
+        <![CDATA[
+
+
+        update `dyna_squire` set
+                            `book_user_id`=#{bookUserId}
+                 ,           `user_id`=#{userId}
+                ,            `squire_bus_type`=#{squireBusType}
+                ,            `business_id`=#{businessId}
+                ,            `book_name`=#{bookName}
+                ,            `cover_path`=#{coverPath}
+                ,            `book_author`=#{bookAuthor}
+                ,            `select_content`=#{selectContent}
+                ,            `comment_content`=#{commentContent}
+                ,            `book_score`=#{bookScore}
+                ,            `num_favor`=#{numFavor}
+                ,            `num_reply`=#{numReply}
+                ,            `is_disp`=#{isDisp}
+                ,            `is_del`=#{isDel}
+                ,            `is_sensitive`=#{isSensitive}
+                ,            `create_time`=#{createTime}
+                ,            `create_by`=#{createBy}
+                ,            `modify_time`=#{modifyTime}
+                ,            `modify_by`=#{modifyBy}
+                where dyna_squire_id=#{dynaSquireId}
+
+
+        ]]>
+    </update>
+
+    <update id="updateFavorNum" parameterType="com.geeboo.dyna.server.client.dto.squire.DynaSquireDTO">
+        <![CDATA[
+
+
+        update `dyna_squire` set `num_favor`=#{numFavor}
+                where dyna_squire_id=#{dynaSquireId}
+
+
+        ]]>
+    </update>
+
+    <update id="updateCommentNum" parameterType="com.geeboo.dyna.server.client.dto.squire.DynaSquireDTO">
+        <![CDATA[
+
+
+        update `dyna_squire` set `num_reply`=#{numReply}
+                where dyna_squire_id=#{dynaSquireId}
+
+
+        ]]>
+    </update>
+
+    <delete id="deleteDynaSquire">
+        <![CDATA[
+
+
+        delete from `dyna_squire` where dyna_squire_id=#{id}
+
+
+        ]]>
+    </delete>
+
+    <select id="query" resultMap="dtoMap" parameterType="com.geeboo.dyna.server.client.dto.squire.DynaSquireDTO">
+        select `dyna_squire_id`
+        ,`user_id`
+        ,`book_user_id`
+        ,`squire_bus_type`
+        ,`business_id`
+        ,`book_name`
+        ,`cover_path`
+        ,`book_author`
+        ,`select_content`
+        ,`comment_content`
+        ,`book_score`
+        ,`num_favor`
+        ,`num_reply`
+        ,`is_disp`
+        ,`is_del`
+        ,`is_sensitive`
+        ,`create_time`
+        ,`create_by`
+        ,`modify_time`
+        ,`modify_by`
+        from `dyna_squire`
+        <where>
+            <if test="null != userId and userId > 0">
+                AND user_id = #{userId}
+            </if>
+            <if test="isSensitive != null ">
+                and is_sensitive = #{isSensitive}
+            </if>
+            <if test="null != bookUserId and bookUserId > 0">
+                AND book_user_id = #{bookUserId}
+            </if>
+        </where>
+        order by `dyna_squire_id` desc
+    </select>
+
+    <select id="batchGetSquireById" resultMap="dtoMap">
+        select `dyna_squire_id`
+        ,`user_id`
+        ,`book_user_id`
+        ,`squire_bus_type`
+        ,`business_id`
+        ,`book_name`
+        ,`cover_path`
+        ,`book_author`
+        ,`select_content`
+        ,`comment_content`
+        ,`book_score`
+        ,`num_favor`
+        ,`num_reply`
+        ,`create_time`
+        ,`create_by`
+        from `dyna_squire`
+        where dyna_squire_id in
+        <foreach collection="idSet" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        and is_del = 0 and is_sensitive = 0
+    </select>
+
+    <select id="findSquireByLastId" resultMap="dtoMap">
+        select `dyna_squire_id`
+        ,`user_id`
+        ,`book_user_id`
+        ,`squire_bus_type`
+        ,`business_id`
+        ,`book_name`
+        ,`cover_path`
+        ,`book_author`
+        ,`select_content`
+        ,`comment_content`
+        ,`book_score`
+        ,`num_favor`
+        ,`num_reply`
+        ,`create_time`
+        ,`create_by`
+        from `dyna_squire` t
+        where is_del = 0
+        <if test="lastId != null and lastId != 0">
+            <![CDATA[ and dyna_squire_id < #{lastId} ]]>
+        </if>
+        <if test="userId != null  and 0 != userId  ">
+            <![CDATA[ and not EXISTS ( SELECT 1 from `dyna_squire` where user_id <> #{userId} and is_sensitive=1 and dyna_squire_id=t.dyna_squire_id ) ]]>
+        </if>
+        order by t.`dyna_squire_id` desc
+        limit #{pageSize}
+    </select>
+
+    <select id="findUserSquireByLastId" resultMap="dtoMap">
+        select `dyna_squire_id`
+        ,`user_id`
+        ,`book_user_id`
+        ,`squire_bus_type`
+        ,`business_id`
+        ,`book_name`
+        ,`cover_path`
+        ,`book_author`
+        ,`select_content`
+        ,`comment_content`
+        ,`book_score`
+        ,`num_favor`
+        ,`num_reply`
+        ,`create_time`
+        ,`create_by`
+        from `dyna_squire`
+        where is_del = 0
+        <if test="lastId != null and lastId != 0">
+            <![CDATA[ and dyna_squire_id < #{lastId} ]]>
+        </if>
+        and user_id = ${userId}
+        order by `dyna_squire_id` desc
+        limit #{pageSize}
+    </select>
+
+    <select id="findAttentionSquireByLastId" resultMap="dtoMap">
+        select `dyna_squire_id`
+        ,`user_id`
+        ,`book_user_id`
+        ,`squire_bus_type`
+        ,`business_id`
+        ,`book_name`
+        ,`cover_path`
+        ,`book_author`
+        ,`select_content`
+        ,`comment_content`
+        ,`book_score`
+        ,`num_favor`
+        ,`num_reply`
+        ,`create_time`
+        ,`create_by`
+        from `dyna_squire`
+        where is_del = 0
+        <if test="lastId != null and lastId != 0">
+            <![CDATA[ and dyna_squire_id < #{lastId} ]]>
+        </if>
+        and is_del = 0
+        and is_sensitive=0
+        and user_id in
+        <foreach collection="attentionUserIdSet" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        order by `dyna_squire_id` desc
+        limit #{pageSize}
+    </select>
+
+    <select id="countUserSquire" resultType="java.lang.Long">
+        select count(*)
+        from `dyna_squire`
+        where user_id = #{userId} and is_del = 0 and is_sensitive=0
+    </select>
+
+    <select id="findUserIdList" resultMap="dtoMap">
+        select user_id
+        from `dyna_squire`
+        group by user_id
+    </select>
+
+    <update id="batchUpdateCommentNum" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            <![CDATA[update `dyna_squire` set `num_reply`= #{item.numReply} where dyna_squire_id = #{item.dynaSquireId}]]>
+        </foreach>
+    </update>
+
+    <update id="batchUpdateFavorNum" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            <![CDATA[update `dyna_squire` set `num_favor`= #{item.numFavor} where dyna_squire_id = #{item.dynaSquireId}]]>
+        </foreach>
+    </update>
+</mapper>

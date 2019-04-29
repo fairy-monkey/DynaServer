@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.topic.IDynaTopicContentMapper">
+    <resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.topic.DynaTopicContentDTO">
+        <id column="dyna_topic_content_id" jdbcType="INTEGER" property="dynaTopicContentId"/>
+                <result column="dyna_topic_id" jdbcType="INTEGER" property="dynaTopicId"/>
+                <result column="dyna_topic_content" jdbcType="VARCHAR" property="dynaTopicContent"/>
+                <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+                <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+                <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+                <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+            </resultMap>
+
+    <select id="findById" resultMap="dtoMap">
+        <![CDATA[
+        select * from dyna_topic_content  where dyna_topic_content_id = #{dynaTopicContentId}
+        ]]>
+    </select>
+
+    <insert id="add" parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicContentDTO" useGeneratedKeys="true" keyProperty="dyna_topic_content_id">
+        <![CDATA[
+        insert into `dyna_topic_content`(
+                `dyna_topic_id`
+                ,`dyna_topic_content`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                )values(
+                #{dynaTopicId}
+                ,#{dynaTopicContent}
+                ,#{createTime}
+                ,#{createBy}
+                ,#{modifyTime}
+                ,#{modifyBy}
+                )
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicContentDTO">
+        <![CDATA[
+        update `dyna_topic_content` set
+                            `dyna_topic_id`=#{dynaTopicId}
+                ,            `dyna_topic_content`=#{dynaTopicContent}
+                ,            `create_time`=#{createTime}
+                ,            `create_by`=#{createBy}
+                ,            `modify_time`=#{modifyTime}
+                ,            `modify_by`=#{modifyBy}
+                where dyna_topic_content_id=#{dynaTopicContentId}
+        ]]>
+    </update>
+
+    <delete id="deleteDynaTopicContent">
+        <![CDATA[
+        delete from `dyna_topic_content` where dyna_topic_content_id=#{id}
+        ]]>
+    </delete>
+
+    <select id="query" resultMap="dtoMap"  parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicContentDTO">
+       <include refid="sql_query"/>
+    </select>
+
+    <select id="findByCondition" resultMap="dtoMap"  parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicContentDTO">
+        <include refid="sql_query"/>
+        limit 1
+    </select>
+
+    <sql id="sql_query">
+        select `dyna_topic_content_id`
+        ,`dyna_topic_id`
+        ,`dyna_topic_content`
+        ,`create_time`
+        ,`create_by`
+        ,`modify_time`
+        ,`modify_by`
+        from `dyna_topic_content`
+        <where>
+            <if test="dynaTopicContent != null  and '' != dynaTopicContent  ">
+                dyna_topic_content = #{dynaTopicContent}
+            </if>
+        </where>
+        order by `dyna_topic_content_id` desc
+    </sql>
+
+    <select id="findByTopicId" resultMap="dtoMap" >
+        select `dyna_topic_content_id`
+        ,`dyna_topic_id`
+        ,`dyna_topic_content`
+        ,`create_time`
+        ,`create_by`
+        ,`modify_time`
+        ,`modify_by`
+        from `dyna_topic_content`
+        where dyna_topic_id = #{topicId}
+    </select>
+
+    <select id="batchGetContentByTopicIdSet" resultMap="dtoMap" >
+        select `dyna_topic_content_id`
+        ,`dyna_topic_id`
+        ,`dyna_topic_content`
+        ,`create_time`
+        ,`create_by`
+        ,`modify_time`
+        ,`modify_by`
+        from `dyna_topic_content`
+        where dyna_topic_id in
+
+        <foreach collection="set" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="batchGetContentByTopicIdMap" resultMap="dtoMap" >
+        select `dyna_topic_content_id`
+        ,`dyna_topic_id`
+        ,`dyna_topic_content`
+        ,`create_time`
+        ,`create_by`
+        ,`modify_time`
+        ,`modify_by`
+        from `dyna_topic_content`
+        where dyna_topic_id in
+
+        <foreach collection="map" item="item" index="key" open="(" close=")" separator=",">
+            #{key}
+        </foreach>
+    </select>
+</mapper>

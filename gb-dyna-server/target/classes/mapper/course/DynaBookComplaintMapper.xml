@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.course.IDynaCourseComplaintMapper">
+    <resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.course.DynaCourseComplaintDTO">
+        <id column="dyna_course_complaint_id" jdbcType="INTEGER" property="dynaCourseComplaintId"/>
+        <result column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="complaint_content" jdbcType="VARCHAR" property="complaintContent"/>
+        <result column="complaint_type" jdbcType="TINYINT" property="complaintType"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="to_user_id" jdbcType="INTEGER" property="toUserId"/>
+        <result column="complaint_status" jdbcType="TINYINT" property="complaintStatus"/>
+        <result column="content_id" jdbcType="INTEGER" property="contentId"/>
+        <result column="complaint_obj" jdbcType="TINYINT" property="complaintObj"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+        <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+    </resultMap>
+
+    <select id="findById" resultMap="dtoMap">
+        <![CDATA[
+        select * from dyna_course_complaint  where dyna_course_complaint_id = #{dynaCourseComplaintId}
+        ]]>
+    </select>
+
+    <insert id="add" parameterType="com.geeboo.dyna.server.client.dto.course.DynaCourseComplaintDTO" useGeneratedKeys="true" keyProperty="dyna_course_comment_id">
+        <![CDATA[
+        insert into `dyna_course_complaint`(
+                `course_id`
+                ,`complaint_content`
+                ,`complaint_type`
+                ,`user_id`
+                ,`to_user_id`
+                ,`complaint_status`
+                ,`content_id`
+                ,`complaint_obj`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                )values(
+                #{courseId}
+                ,#{complaintContent}
+                ,#{complaintType}
+                ,#{userId}
+                ,#{toUserId}
+                ,#{complaintStatus}
+                ,#{contentId}
+                ,#{complaintObj}
+                ,#{createTime}
+                ,#{createBy}
+                ,#{modifyTime}
+                ,#{modifyBy}
+                )
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.course.DynaCourseComplaintDTO">
+        <![CDATA[
+        update `dyna_course_complaint` set
+                            `course_id`=#{courseId}
+                ,            `complaint_content`=#{complaintContent}
+                ,            `complaint_type`=#{complaintType}
+                ,            `user_id`=#{userId}
+                ,            `to_user_id`=#{toUserId}
+                ,            `complaint_status`=#{complaintStatus}
+                ,            `content_id`=#{contentId}
+                ,            `complaint_obj`=#{complaintObj}
+                ,            `create_time`=#{createTime}
+                ,            `create_by`=#{createBy}
+                ,            `modify_time`=#{modifyTime}
+                ,            `modify_by`=#{modifyBy}
+                where dyna_course_complaint_id=#{dynaCourseComplaintId}
+        ]]>
+    </update>
+
+    <delete id="deleteDynaCourseComplaint">
+        <![CDATA[
+        delete from `dyna_course_complaint` where dyna_course_complaint_id=#{id}
+        ]]>
+    </delete>
+
+    <select id="query" resultMap="dtoMap"  parameterType="com.geeboo.dyna.server.client.dto.course.DynaCourseComplaintDTO">
+        select `dyna_course_complaint_id`
+                ,`course_id`
+                ,`complaint_content`
+                ,`complaint_type`
+                ,`user_id`
+                ,`to_user_id`
+                ,`complaint_status`
+                ,`content_id`
+                ,`complaint_obj`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                from `dyna_course_complaint`
+        <where>
+                <if test="complaintType != null  and '' != complaintType  ">
+             complaint_type = #{complaintType}
+        </if>
+                <if test="userId != null  and '' != userId  ">
+             and   user_id = #{userId}
+        </if>
+                <if test="toUserId != null  and '' != toUserId  ">
+             and   to_user_id = #{toUserId}
+        </if>
+                <if test="complaintStatus != null  and '' != complaintStatus  ">
+             and   complaint_status = #{complaintStatus}
+        </if>
+                <if test="contentId != null  and '' != contentId  ">
+             and   content_id = #{contentId}
+        </if>
+                <if test="complaintObj != null  and '' != complaintObj  ">
+             and   complaint_obj = #{complaintObj}
+        </if>
+                </where>
+        order by `dyna_course_complaint_id` desc
+    </select>
+
+    <select id="countComplaint" parameterType="com.geeboo.dyna.server.client.dto.course.DynaCourseComplaintDTO" resultType="java.lang.Long">
+        <![CDATA[
+            select count(*)
+            from `dyna_course_complaint`
+            where course_id = #{courseId}
+            and complaint_type = #{complaintType}
+            and content_id = #{contentId}
+            and user_id = #{userId}
+            and complaint_status in (0, 2)
+        ]]>
+    </select>
+</mapper>

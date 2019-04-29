@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.sensitivestatistic.ISensitiveStatisticMapper">
+    <select id="getList" resultType="java.util.Map" statementType="STATEMENT">
+        select ${fields} from ${tableName} where is_sensitive=1 and create_time> ${createTime} limit ${startRow},${endRow}
+    </select>
+
+    <select id="getCount" resultType="java.lang.Integer" statementType="STATEMENT">
+        select count(1) from ${tableName} where is_sensitive=1 and create_time> ${createTime}
+    </select>
+
+    <select id="getNoSensitiveList" resultType="java.util.Map" statementType="STATEMENT">
+        select ${fields} from ${tableName} where is_sensitive=0 and is_del=0 limit ${startRow},${endRow}
+    </select>
+
+    <select id="getNoSensitiveCount" resultType="java.lang.Integer" statementType="STATEMENT">
+        select count(1) from ${tableName} where is_sensitive=0 and is_del=0
+    </select>
+
+    <update id="update" statementType="STATEMENT">
+        <![CDATA[
+
+
+        update ${tableName} set is_sensitive=1 where ${prikeyIdName}= ${prikeyIdValue}
+
+
+
+        ]]>
+    </update>
+</mapper>

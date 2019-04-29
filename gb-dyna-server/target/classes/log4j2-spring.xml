@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="WARN">
+    <Properties>
+        <property name="SERVER_NAME">DynaServer</property>
+        <property name="LOG_HOME">logs/${SERVER_NAME}Log</property>
+        <property name="ConsoleLogLevel">info</property>
+        <Property name="SERVER_VERSION">1.0.0</Property>
+        <Property name="PID">????</Property>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+        <Property name="CONSOLE_LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} - ${LOG_LEVEL_PATTERN} ${sys:PID} --- [%t] %class{36}#%M-%L : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+        <Property name="CONSOLE_COLOURFUL_LOG_PATTERN">%clr{%d{yyyy-MM-dd - HH:mm:ss.SSS}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%class{36}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+        <Property name="FILE_LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} - ${LOG_LEVEL_PATTERN} ${sys:PID} --- [%t] %class{36}#%M-%L : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+        <Property name="ERROR_LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} - ${SERVER_NAME} ${SERVER_VERSION} ${LOG_LEVEL_PATTERN} ${sys:PID} --- [%t] %class{36}#%M-%L : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <ThresholdFilter level="${ConsoleLogLevel}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${CONSOLE_LOG_PATTERN}"/>
+        </Console>
+
+        <!-- 调试日志 -->
+        <RollingFile name="ConsoleFile" fileName="${LOG_HOME}/console.log"
+                     filePattern="${LOG_HOME}/console/$${date:yyyy-MM}/console-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout charset="UTF-8"
+                           pattern="${FILE_LOG_PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="50MB"/>
+        </RollingFile>
+
+        <!-- 错误日志 -->
+        <RollingFile name="ERROR" fileName="${LOG_HOME}/error/error.log"
+                     filePattern="${LOG_HOME}/error/$${date:yyyy-MM}/error-%d{yyyy-MM-dd-HHmmss}.log.gz">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="UTF-8" pattern="${ERROR_LOG_PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="50MB"/>
+        </RollingFile>
+
+        <!-- 调试日志 -->
+        <RollingFile name="LogDebug" fileName="${LOG_HOME}/debug/debug.log"
+                     filePattern="${LOG_HOME}/debug/$${date:yyyy-MM}/debug-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout charset="UTF-8"
+                           pattern="${FILE_LOG_PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="50MB"/>
+        </RollingFile>
+
+        <RollingFile name="scheduler" fileName="${LOG_HOME}/scheduler/scheduler.log"
+                     filePattern="${LOG_HOME}/scheduler/$${date:yyyy-MM}/scheduler-%d{yyyy-MM-dd}-%i.log.gz"><!-- roll per day is ok -->
+            <PatternLayout charset="UTF-8"
+                           pattern="${FILE_LOG_PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="10MB"/>
+        </RollingFile>
+
+        <RollingFile name="dubbo" fileName="${LOG_HOME}/dubbo/dubbo.log"
+                     filePattern="${LOG_HOME}/dubbo/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/dubbo-%d{yyyy-MM-dd-HHmmss}.log.gz">
+            <PatternLayout charset="UTF-8" pattern="${FILE_LOG_PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="50MB"/>
+        </RollingFile>
+
+        <RollingFile name="gbeye" fileName="${LOG_HOME}/gbeye/gbeye.log"
+                     filePattern="${LOG_HOME}/szyeye/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/gbeye-%d{yyyy-MM-dd-HHmmss}.log.gz">
+            <PatternLayout charset="UTF-8" pattern="${FILE_LOG_PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="50MB"/>
+        </RollingFile>
+
+        <RollingFile name="slowsql" fileName="${LOG_HOME}/slowsql/slowsql.log"
+                     filePattern="${LOG_HOME}/slowsql/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/slowsql-%d{yyyy-MM-dd-HHmmss}.log.gz">
+            <PatternLayout charset="UTF-8" pattern="${FILE_LOG_PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="50MB"/>
+        </RollingFile>
+
+        <RollingFile name="deprecated" fileName="${LOG_HOME}/deprecated/deprecated.log"
+                     filePattern="${LOG_HOME}/deprecated/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/deprecated-%d{yyyy-MM-dd-HHmmss}.log.gz">
+            <PatternLayout charset="UTF-8" pattern="${FILE_LOG_PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="50MB"/>
+        </RollingFile>
+
+        <RollingFile name="longtrans" fileName="${LOG_HOME}/longtrans/longtrans.log"
+                     filePattern="${LOG_HOME}/longtrans/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/longtrans-%d{yyyy-MM-dd-HHmmss}.log.gz">
+            <PatternLayout charset="UTF-8"
+                           pattern="${FILE_LOG_PATTERN}" />
+            <SizeBasedTriggeringPolicy size="50MB" />
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="ConsoleFile"/>
+            <appender-ref ref="ERROR"/>
+        </Root>
+
+        <logger name="org.springframework" level="info" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="ConsoleFile"/>
+            <appender-ref ref="ERROR"/>
+        </logger>
+
+        <logger name="org.hibernate" level="info" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="ConsoleFile"/>
+            <appender-ref ref="ERROR"/>
+        </logger>
+
+        <logger name="org.apache" level="warn">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="ConsoleFile"/>
+            <appender-ref ref="ERROR"/>
+        </logger>
+
+        <logger name="scheduler" level="info" additivity="false" includeLocation="true">
+            <appender-ref ref="scheduler"/>
+        </logger>
+
+        <AsyncLogger name="debug" level="info" additivity="false" includeLocation="true">
+            <appender-ref ref="LogDebug"/>
+        </AsyncLogger>
+
+        <AsyncLogger  name="gbeye" level="info" additivity="false" includeLocation="true">
+            <appender-ref ref="gbeye"/>
+        </AsyncLogger >
+
+        <logger  name="com.alibaba.druid.filter.stat" level="info" additivity="false" >
+            <appender-ref ref="slowsql"/>
+        </logger >
+
+        <logger name="com.alibaba.druid.pool.DruidDataSource" level="debug" additivity="false">
+            <appender-ref ref="longtrans" />
+        </logger>
+
+        <logger name="deprecated" level="info" additivity="false" includeLocation="true">
+            <appender-ref ref="deprecated"/>
+        </logger>
+
+        <logger name="com.geeboo.dyna.server.mapper" level="debug" additivity="true" includeLocation="true">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="ERROR"/>
+        </logger>
+
+        <logger name="com.netflix.discovery" level="warn" additivity="true" includeLocation="true">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="ERROR"/>
+        </logger>
+
+        <Logger name="org.apache.catalina.startup.DigesterFactory" level="error" />
+        <Logger name="org.apache.catalina.util.LifecycleBase" level="error" />
+        <Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
+        <logger name="org.apache.sshd.common.util.SecurityUtils" level="warn"/>
+        <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+        <Logger name="org.crsh.plugin" level="warn" />
+        <logger name="org.crsh.ssh" level="warn"/>
+        <Logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error" />
+        <Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
+        <logger name="org.springframework.boot.actuate.autoconfigure.CrshAutoConfiguration" level="warn"/>
+        <logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
+        <logger name="org.thymeleaf" level="warn"/>
+    </Loggers>
+</Configuration>

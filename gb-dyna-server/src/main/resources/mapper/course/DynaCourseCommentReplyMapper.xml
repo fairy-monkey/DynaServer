@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.course.IDynaCourseCommentReplyMapper">
+    <!--<resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.course.DynaCourseCommentReplyDTO">
+        <id column="dyna_course_comment_reply_id" jdbcType="INTEGER" property="dynaCourseCommentReplyId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="dyna_course_comment_id" jdbcType="INTEGER" property="dynaCourseCommentId"/>
+        <result column="to_comment_reply_id" jdbcType="INTEGER" property="toCommentReplyId"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="is_sensitive" jdbcType="TINYINT" property="isSensitive"/>
+        <result column="reply_content" jdbcType="VARCHAR" property="replyContent"/>
+        <result column="to_user_id" jdbcType="INTEGER" property="toUserId"/>
+        <result column="reply_type" jdbcType="TINYINT" property="replyType"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+        <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+    </resultMap>
+
+    <select id="findById" resultMap="dtoMap">
+        <![CDATA[
+        select * from dyna_course_comment_reply where dyna_course_comment_reply_id = #{dynaCourseCommentReplyId}
+        ]]>
+    </select>
+
+    <insert id="create" parameterType="com.geeboo.dyna.server.client.dto.course.DynaCourseCommentReplyDTO" useGeneratedKeys="true" keyProperty="dynaCourseCommentReplyId">
+        <![CDATA[
+        insert into `dyna_course_comment_reply`(
+                `user_id`
+                ,`course_id`
+                ,`dyna_course_comment_id`
+                ,`to_comment_reply_id`
+                ,`is_del`
+                ,`is_sensitive`
+                ,`reply_content`
+                ,`to_user_id`
+                ,`reply_type`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                )values(
+                #{userId}
+                ,#{courseId}
+                ,#{dynaCourseCommentId}
+                ,#{toCommentReplyId}
+                ,#{isDel}
+                ,#{isSensitive}
+                ,#{replyContent}
+                ,#{toUserId}
+                ,#{replyType}
+                ,#{createTime}
+                ,#{createBy}
+                ,#{modifyTime}
+                ,#{modifyBy}
+                )
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.course.DynaCourseCommentReplyDTO">
+        <![CDATA[
+        update `dyna_course_comment_reply` set
+                            `user_id`=#{userId}
+                ,            `course_id`=#{courseId}
+                ,            `dyna_course_comment_id`=#{dynaCourseCommentId}
+                ,            `to_comment_reply_id`=#{toCommentReplyId}
+                ,            `is_del`=#{isDel}
+                ,            `is_sensitive`=#{isSensitive}
+                ,            `reply_content`=#{replyContent}
+                ,            `to_user_id`=#{toUserId}
+                ,            `reply_type`=#{replyType}
+                ,            `create_time`=#{createTime}
+                ,            `create_by`=#{createBy}
+                ,            `modify_time`=#{modifyTime}
+                ,            `modify_by`=#{modifyBy}
+                where dyna_course_comment_reply_id=#{dynaCourseCommentReplyId}
+        ]]>
+    </update>
+
+    <delete id="remove">
+        <![CDATA[
+        delete from `dyna_course_comment_reply` where dyna_course_comment_reply_id=#{id}
+        ]]>
+    </delete>
+
+    <select id="query" resultMap="dtoMap" parameterType="com.geeboo.dyna.server.client.dto.course.DynaCourseCommentReplyDTO">
+        select `dyna_course_comment_reply_id`
+                ,`user_id`
+                ,`course_id`
+                ,`dyna_course_comment_id`
+                ,`to_comment_reply_id`
+                ,`is_del`
+                ,`is_sensitive`
+                ,`reply_content`
+                ,`to_user_id`
+                ,`reply_type`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                from `dyna_course_comment_reply`
+            <where>
+            </where>
+        order by `dyna_course_comment_reply_id` desc
+    </select>-->
+</mapper>

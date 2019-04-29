@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.topic.IDynaTopicMapper">
+    <resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.topic.DynaTopicDTO">
+        <id column="dyna_topic_id" jdbcType="INTEGER" property="dynaTopicId"/>
+                <result column="topic_title" jdbcType="VARCHAR" property="topicTitle"/>
+                <result column="topic_type" jdbcType="TINYINT" property="topicType"/>
+                <result column="background_color" jdbcType="VARCHAR" property="backgroundColor"/>
+                <result column="publish_status" jdbcType="TINYINT" property="publishStatus"/>
+                <result column="publish_time" jdbcType="BIGINT" property="publishTime"/>
+                <result column="index_no" jdbcType="TINYINT" property="indexNo"/>
+                <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+                <result column="business_id" jdbcType="INTEGER" property="businessId"/>
+                <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+                <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+                <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+                <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+            </resultMap>
+
+    <resultMap id="listDtoMap" type="com.geeboo.dyna.server.client.dto.topic.DynaTopicListDTO">
+        <id column="dyna_topic_id" jdbcType="INTEGER" property="dynaTopicId"/>
+        <result column="topic_title" jdbcType="VARCHAR" property="topicTitle"/>
+        <result column="topic_type" jdbcType="TINYINT" property="topicType"/>
+        <result column="background_color" jdbcType="VARCHAR" property="backgroundColor"/>
+        <result column="publish_time" jdbcType="BIGINT" property="publishTime"/>
+    </resultMap>
+
+    <select id="findById" resultMap="dtoMap">
+        <![CDATA[
+        select * from dyna_topic where dyna_topic_id = #{dynaTopicId}
+        ]]>
+    </select>
+
+    <insert id="add" parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicDTO" useGeneratedKeys="true" keyProperty="dynaTopicId">
+        <![CDATA[
+        insert into `dyna_topic`(
+                `topic_title`
+                ,`topic_type`
+                ,`background_color`
+                ,`publish_status`
+                ,`publish_time`
+                ,`index_no`
+                ,`is_del`
+                ,`business_id`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                )values(
+                #{topicTitle}
+                ,#{topicType}
+                ,#{backgroundColor}
+                ,#{publishStatus}
+                ,#{publishTime}
+                ,#{indexNo}
+                ,#{isDel}
+                ,#{businessId}
+                ,#{createTime}
+                ,#{createBy}
+                ,#{modifyTime}
+                ,#{modifyBy}
+                )
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicDTO">
+        <![CDATA[
+        update `dyna_topic` set
+                            `topic_title`=#{topicTitle}
+                ,            `topic_type`=#{topicType}
+                ,            `background_color`=#{backgroundColor}
+                ,            `publish_status`=#{publishStatus}
+                ,            `publish_time`=#{publishTime}
+                ,            `index_no`=#{indexNo}
+                ,            `is_del`=#{isDel}
+                ,            `business_id`=#{businessId}
+                ,            `create_time`=#{createTime}
+                ,            `create_by`=#{createBy}
+                ,            `modify_time`=#{modifyTime}
+                ,            `modify_by`=#{modifyBy}
+                where dyna_topic_id=#{dynaTopicId}
+        ]]>
+    </update>
+
+    <update id="batchUpdateIndex" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            <![CDATA[
+        update `dyna_topic` set
+                `index_no`=#{item.indexNo}
+                , `modify_time`=#{item.modifyTime}
+                , `modify_by`=#{item.modifyBy}
+                where dyna_topic_id=#{item.dynaTopicId}
+        ]]>
+        </foreach>
+    </update>
+
+    <delete id="deleteDynaTopic">
+        <![CDATA[
+        delete from `dyna_topic` where dyna_topic_id=#{id}
+        ]]>
+    </delete>
+
+    <select id="query" resultMap="dtoMap" parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicDTO">
+        select `dyna_topic_id`
+        ,`topic_title`
+        ,`topic_type`
+        ,`background_color`
+        ,`publish_status`
+        ,`publish_time`
+        ,`index_no`
+        ,`is_del`
+        ,`business_id`
+        ,`create_time`
+        ,`create_by`
+        ,`modify_time`
+        ,`modify_by`
+        from `dyna_topic`
+        <where>
+            <if test="topicTitle != null  and '' != topicTitle  ">
+                topic_title like "%"#{topicTitle}"%"
+            </if>
+            <if test="topicType != null  and '' != topicType  ">
+                and topic_type = #{topicType}
+            </if>
+            <if test="publishStatus != null">
+                and publish_status = #{publishStatus}
+            </if>
+            <if test="publishTimeStart != null">
+                and publish_time >= #{publishTimeStart}
+            </if>
+            <if test="publishTimeEnd != null">
+                <![CDATA[ and publish_time <= #{publishTimeEnd} ]]>
+            </if>
+        </where>
+        order by `dyna_topic_id` desc
+    </select>
+
+    <select id="getTopicPublishList" resultMap="dtoMap">
+        select `dyna_topic_id`
+        ,`topic_title`
+        ,`topic_type`
+        ,`publish_status`
+        ,`publish_time`
+        ,`index_no`
+        ,`is_del`
+        ,`business_id`
+        from `dyna_topic`
+        where publish_status = 1
+
+        <if test="lastId != null">
+            <![CDATA[ and dyna_topic_id > #{lastId} ]]>
+        </if>
+        order by `dyna_topic_id` desc
+
+        limit #{pageSize}
+    </select>
+
+    <select id="getTopicTimeToPublishList" resultMap="dtoMap">
+        select `dyna_topic_id`
+        ,`topic_title`
+        ,`topic_type`
+        ,`publish_status`
+        ,`publish_time`
+        ,`index_no`
+        ,`is_del`
+        ,`business_id`
+        from `dyna_topic`
+        where publish_status = 2
+
+        <if test="lastId != null">
+            <![CDATA[ and dyna_topic_id > #{lastId} ]]>
+        </if>
+        order by `dyna_topic_id` desc
+
+        limit #{pageSize}
+    </select>
+
+    <select id="findTopicByMinSort" resultMap="dtoMap">
+        select `dyna_topic_id`
+        ,`topic_title`
+        ,`topic_type`
+        ,`publish_status`
+        ,`publish_time`
+        ,`index_no`
+        ,`is_del`
+        from `dyna_topic`
+        where publish_status = 1
+
+        <if test="sort != null">
+            <![CDATA[ and index_no >= #{sort} ]]>
+        </if>
+        order by `index_no` asc
+    </select>
+
+    <select id="findLatestTopic" resultMap="dtoMap">
+        select `dyna_topic_id`
+        ,`topic_title`
+        ,`topic_type`
+        ,`publish_status`
+        ,`publish_time`
+        ,`index_no`
+        ,`is_del`
+        from `dyna_topic`
+        where publish_status = 1
+        and is_del=0
+        and index_no > 0
+        order by `index_no` asc,dyna_topic_id desc
+    </select>
+
+    <select id="batchGetTopicListByIdSet" resultMap="listDtoMap">
+        <![CDATA[
+        select `dyna_topic_id`
+        ,`topic_title`
+        ,`publish_time`
+        from `dyna_topic`
+        where dyna_topic_id in
+        ]]>
+
+        <foreach collection="set" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

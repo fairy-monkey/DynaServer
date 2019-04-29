@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.digest.IDynaDigestFavorMapper">
+    <resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.digest.DynaDigestFavorDTO">
+        <id column="dyna_digest_favor_id" jdbcType="INTEGER" property="dynaDigestFavorId"/>
+        <result column="dyna_digest_id" jdbcType="INTEGER" property="dynaDigestId"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="is_favor" jdbcType="INTEGER" property="isFavor"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+        <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+    </resultMap>
+
+    <select id="getFavorByDigestAndUser" resultMap="dtoMap">
+        <![CDATA[
+
+          select
+            `dyna_digest_favor_id`,
+            `dyna_digest_id`,
+            `user_id`,
+            `is_favor`,
+            `create_time`,
+            `create_by`,
+            `modify_time`,
+            `modify_by`
+          from dyna_digest_favor
+          where dyna_digest_id = #{dynaDigestId} and user_id = #{userId}
+
+        ]]>
+    </select>
+
+    <insert id="add" parameterType="com.geeboo.dyna.server.client.dto.digest.DynaDigestFavorDTO" useGeneratedKeys="true"
+            keyProperty="dyna_digest_favor_id">
+        <![CDATA[
+
+            INSERT INTO `dyna_digest_favor` (
+            `dyna_digest_id`,
+            `user_id`,
+            `is_favor`,
+            `create_time`,
+            `create_by`,
+            `modify_time`,
+            `modify_by`
+            )
+            VALUES
+            (
+              #{dynaDigestId},
+              #{userId},
+              #{isFavor},
+              #{createTime},
+              #{createBy},
+              #{modifyTime},
+              #{modifyBy}
+            )
+
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.digest.DynaDigestFavorDTO">
+        <![CDATA[
+
+            UPDATE
+            `dyna_digest_favor`
+            SET
+            `is_favor` = #{isFavor},
+            `modify_time` = #{modifyTime},
+            `modify_by` = #{modifyBy}
+            WHERE `dyna_digest_id` = #{dynaDigestId} and  user_id = #{userId}
+
+        ]]>
+    </update>
+
+    <select id="getDigestFavorList" parameterType="integer" resultMap="dtoMap">
+          select
+            `dyna_digest_favor_id`,
+            `dyna_digest_id`,
+            `user_id`,
+            `is_favor`,
+            `create_time`,
+            `create_by`,
+            `modify_time`,
+            `modify_by`
+          from dyna_digest_favor
+          where user_id = #{userId}
+    </select>
+</mapper>

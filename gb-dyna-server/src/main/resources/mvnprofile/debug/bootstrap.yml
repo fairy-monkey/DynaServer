@@ -1,0 +1,63 @@
+server:
+    port: 8767
+    context-path: /DynaServer
+info:
+    name: ${server.context-path}
+
+spring:
+    application:
+        name: gb-dyna-server-wwc
+    cloud:
+        config:
+            name: dyna_server_application, dyna_server_config, dyna_server_db, dyna_server_redis, common_rabbit_mq_config, common_qiniu_config #配置文件名称
+            profile: default
+            label: master #对应的分支
+            discovery:
+                enabled: true #启用发现服务功能
+                service-id: gb-config #指定服务名称
+    thymeleaf:
+        cache: false
+    devtools:
+        restart:
+            enabled: true
+
+eureka:
+    instance:
+        instance-id: ${spring.cloud.client.ipAddress}:${server.port}${server.context-path}
+        hostname: ${spring.cloud.client.ipAddress}${server.context-path}
+        prefer-ip-address: true
+        ip-address: ${spring.cloud.client.ipAddress}
+        statusPageUrlPath: ${server.context-path}/info
+        healthCheckUrlPath: ${server.context-path}/health
+        homePageUrl: ${server.context-path}
+        context-path: ${server.context-path}
+        metadata-map:
+            configPath: ${server.context-path}
+            management:
+                context-path: ${server.context-path}
+
+        # 服务刷新时间配置，每隔这个时间会主动心跳一次
+        # 默认30s
+        lease-renewal-interval-in-seconds: 1
+        #### 服务过期配置 ####
+        # 服务过期时间配置,超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除
+        # 这个配置一般为服务刷新时间配置的三倍
+        # 默认90s
+        lease-expiration-duration-in-seconds: 3
+
+    client:
+        serviceUrl:
+#            defaultZone: http://192.168.10.173:8761/eureka/
+            defaultZone: http://${EUREKA_HOST:192.168.10.173}:${EUREKA_PORT:8761}/eureka/
+
+        # eureka client刷新本地缓存时间
+        # 默认30s
+        registryFetchIntervalSeconds: 5
+
+# eureka客户端ribbon刷新时间
+# 默认30s
+ribbon:
+    ServerListRefreshInterval: 5000
+    ReadTimeout: 30000
+
+gb-dyna-server: gb-dyna-server

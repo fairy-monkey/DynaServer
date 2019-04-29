@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.squire.IDynaSquireFavorMapper">
+    <resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.squire.DynaSquireFavorDTO">
+        <id column="squire_favor_id" jdbcType="INTEGER" property="squireFavorId"/>
+                <result column="dyna_squire_id" jdbcType="INTEGER" property="dynaSquireId"/>
+                <result column="user_id" jdbcType="INTEGER" property="userId"/>
+                <result column="is_favor" jdbcType="TINYINT" property="isFavor"/>
+                <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+                <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+                <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+                <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+            </resultMap>
+
+    <select id="findById" resultMap="dtoMap">
+        <![CDATA[
+        select * from dyna_squire_favor  where squire_favor_id = #{squireFavorId}
+        ]]>
+    </select>
+
+    <insert id="add" parameterType="com.geeboo.dyna.server.client.dto.squire.DynaSquireFavorDTO" useGeneratedKeys="true" keyProperty="squireFavorId">
+        <![CDATA[
+        insert into `dyna_squire_favor`(
+                `dyna_squire_id`
+                ,`user_id`
+                ,`is_favor`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                )values(
+                #{dynaSquireId}
+                ,#{userId}
+                ,#{isFavor}
+                ,#{createTime}
+                ,#{createBy}
+                ,#{modifyTime}
+                ,#{modifyBy}
+                )
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.squire.DynaSquireFavorDTO">
+        <![CDATA[
+        update `dyna_squire_favor` set
+                            `dyna_squire_id`=#{dynaSquireId}
+                ,            `user_id`=#{userId}
+                ,            `is_favor`=#{isFavor}
+                ,            `create_time`=#{createTime}
+                ,            `create_by`=#{createBy}
+                ,            `modify_time`=#{modifyTime}
+                ,            `modify_by`=#{modifyBy}
+                where squire_favor_id=#{squireFavorId}
+        ]]>
+    </update>
+
+    <delete id="deleteDynaSquireFavor">
+        <![CDATA[
+        delete from `dyna_squire_favor` where squire_favor_id=#{id}
+        ]]>
+    </delete>
+
+    <select id="query" resultMap="dtoMap"  parameterType="com.geeboo.dyna.server.client.dto.squire.DynaSquireFavorDTO">
+        select `squire_favor_id`
+                ,`dyna_squire_id`
+                ,`user_id`
+                ,`is_favor`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                from `dyna_squire_favor`
+        <where>
+            <if test="userId !=null and userId >0">
+                user_id = #{userId}
+            </if>
+            <if test="dynaSquireId !=null and dynaSquireId >0">
+               and dyna_squire_id = #{dynaSquireId}
+            </if>
+            <if test="isFavor !=null and '' !=isFavor">
+                and is_favor = #{isFavor}
+            </if>
+        </where>
+        order by `squire_favor_id` desc
+    </select>
+
+    <select id = "findSquireFavorById" resultMap="dtoMap" parameterType="com.geeboo.dyna.server.client.dto.squire.DynaSquireFavorDTO">
+        SELECT
+        `squire_favor_id`,
+        `dyna_squire_id`,
+        `dyna_squire_comment_id`,
+        `user_id`,
+        `is_favor`,
+        `create_time`,
+        `create_by`,
+        `modify_time`,
+        `modify_by`
+        FROM `dyna_squire_favor`
+        where user_id = #{userId} and dyna_squire_id = #{dynaSquireId} and is_favor = 1
+    </select>
+
+    <select id="getFavorBySquireAndUser" resultMap="dtoMap">
+        select `squire_favor_id`
+                ,`dyna_squire_id`
+                ,`user_id`
+                ,`is_favor`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+        from `dyna_squire_favor`
+        where dyna_squire_id = #{dynaSquireId}
+        and user_id = #{userId}
+    </select>
+
+    <select id="findSquireFavorListByUser" resultMap="dtoMap">
+        select `dyna_squire_id`
+        from `dyna_squire_favor`
+        where user_id = #{userId}
+        and dyna_squire_id in
+        <foreach collection="squireIdSet" item="item" index="index" open=" (" close=") " separator=",">
+            #{item}
+        </foreach>
+        and is_favor = 1
+    </select>
+
+    <select id="countFavorBySquire" resultType="java.lang.Long">
+        select count(*)
+        from `dyna_squire_favor`
+        where dyna_squire_id = #{squireId}
+        and is_favor = 1
+    </select>
+</mapper>

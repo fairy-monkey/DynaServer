@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.book.IDynaBookCommentReplyMapper">
+    <resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.book.DynaBookCommentReplyDTO">
+        <id column="dyna_book_comment_reply_id" jdbcType="INTEGER" property="dynaBookCommentReplyId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="book_user_id" jdbcType="INTEGER" property="bookUserId"/>
+        <result column="dyna_book_comment_id" jdbcType="INTEGER" property="dynaBookCommentId"/>
+        <result column="to_comment_reply_id" jdbcType="INTEGER" property="toCommentReplyId"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="reply_content" jdbcType="VARCHAR" property="replyContent"/>
+        <result column="to_user_id" jdbcType="INTEGER" property="toUserId"/>
+        <result column="reply_type" jdbcType="TINYINT" property="replyType"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+        <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+
+        <result column="is_sensitive" jdbcType="INTEGER" property="isSensitive"/>
+    </resultMap>
+
+    <resultMap id="listDtoMap" type="com.geeboo.dyna.server.client.dto.book.DynaBookReplyListDTO">
+        <id column="dyna_book_comment_reply_id" jdbcType="INTEGER" property="dynaBookCommentReplyId"/>
+        <result column="book_user_id" jdbcType="INTEGER" property="bookUserId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="dyna_book_comment_id" jdbcType="INTEGER" property="dynaBookCommentId"/>
+        <result column="to_comment_reply_id" jdbcType="INTEGER" property="toCommentReplyId"/>
+        <result column="reply_content" jdbcType="VARCHAR" property="replyContent"/>
+        <result column="to_user_id" jdbcType="INTEGER" property="toUserId"/>
+        <result column="reply_type" jdbcType="TINYINT" property="replyType"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="is_sensitive" jdbcType="INTEGER" property="isSensitive"/>
+    </resultMap>
+
+    <select id="findById" resultMap="dtoMap">
+        <![CDATA[
+
+
+        select * from dyna_book_comment_reply  where dyna_book_comment_reply_id = #{dynaBookCommentReplyId}
+
+
+        ]]>
+    </select>
+
+    <insert id="add" parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicCommentReplyDTO"
+            useGeneratedKeys="true" keyProperty="dynaBookCommentReplyId">
+        <![CDATA[
+
+
+        insert into `dyna_book_comment_reply`(
+                `user_id`
+                ,`book_user_id`
+                ,`dyna_book_comment_id`
+                ,`to_comment_reply_id`
+                ,`is_del`
+                ,`is_sensitive`
+                ,`reply_content`
+                ,`to_user_id`
+                ,`reply_type`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                )values(
+                #{userId}
+                ,#{bookUserId}
+                ,#{dynaBookCommentId}
+                ,#{toCommentReplyId}
+                ,#{isDel}
+                ,#{isSensitive}
+                ,#{replyContent}
+                ,#{toUserId}
+                ,#{replyType}
+                ,#{createTime}
+                ,#{createBy}
+                ,#{modifyTime}
+                ,#{modifyBy}
+                )
+
+
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicCommentReplyDTO">
+        <![CDATA[
+
+
+        update `dyna_book_comment_reply` set
+                            `user_id`=#{userId}
+                ,            `book_user_id`=#{bookUserId}
+                ,            `dyna_book_comment_id`=#{dynaBookCommentId}
+                ,            `to_comment_reply_id`=#{toCommentReplyId}
+                ,            `is_del`=#{isDel}
+                ,            `is_sensitive`=#{isSensitive}
+                ,            `reply_content`=#{replyContent}
+                ,            `to_user_id`=#{toUserId}
+                ,            `reply_type`=#{replyType}
+                ,            `create_time`=#{createTime}
+                ,            `create_by`=#{createBy}
+                ,            `modify_time`=#{modifyTime}
+                ,            `modify_by`=#{modifyBy}
+                where dyna_book_comment_reply_id=#{dynaBookCommentReplyId}
+
+
+        ]]>
+    </update>
+
+    <delete id="deleteDynaBookCommentReply">
+        <![CDATA[
+
+
+        delete from `dyna_book_comment_reply` where dyna_book_comment_reply_id=#{id}
+
+
+        ]]>
+    </delete>
+
+    <delete id="deleteByCommentId">
+        <![CDATA[
+
+
+        delete from `dyna_book_comment_reply` where dyna_book_comment_id=#{commentId}
+
+
+        ]]>
+    </delete>
+
+    <select id="query" resultMap="dtoMap"
+            parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicCommentReplyDTO">
+        select `dyna_book_comment_reply_id`
+        ,`user_id`
+        ,`book_user_id`
+        ,`dyna_book_comment_id`
+        ,`to_comment_reply_id`
+        ,`is_del`
+        ,`is_sensitive`
+        ,`reply_content`
+        ,`to_user_id`
+        ,`reply_type`
+        ,`create_time`
+        ,`create_by`
+        ,`modify_time`
+        ,`modify_by`
+        from `dyna_book_comment_reply`
+        <where>
+            <if test="dynaBookCommentId != null  and '' != dynaBookCommentId  ">
+                dyna_book_comment_id = #{dynaBookCommentId}
+            </if>
+            <if test="replyContent != null  and '' != replyContent  ">
+                and reply_content = #{replyContent}
+            </if>
+            <if test="userId != null  and '' != userId  ">
+                and user_id = #{userId}
+            </if>
+            <if test="isSensitive != null ">
+                and is_sensitive = #{isSensitive}
+            </if>
+            <if test="createTime != null  and '' != createTime  ">
+                and create_time = #{createTime}
+            </if>
+        </where>
+        order by `dyna_book_comment_reply_id` desc
+    </select>
+
+    <select id="queryReplyList" resultMap="listDtoMap"
+            parameterType="com.geeboo.dyna.server.client.dto.topic.DynaTopicReplyListDTO">
+        SELECT
+        `dyna_book_comment_reply_id`,
+        `user_id`,
+        `book_user_id`,
+        `dyna_book_comment_id`,
+        `to_comment_reply_id`,
+        `reply_content`,
+        `to_user_id`,
+        `reply_type`,
+        `create_time`
+        FROM
+        `dyna_book_comment_reply` t
+        where dyna_book_comment_id = #{dynaBookCommentId}
+        <if test="userId != null  and 0 != userId  ">
+            <![CDATA[ and not EXISTS ( SELECT 1 from `dyna_book_comment_reply` where user_id <> #{userId} and is_sensitive=1 and dyna_book_comment_reply_id=t.dyna_book_comment_reply_id ) ]]>
+        </if>
+        and is_del = 0
+        ORDER BY t.`dyna_book_comment_reply_id` DESC
+    </select>
+
+    <select id="countReplyByComment" resultType="java.lang.Long">
+        select count(*)
+        from `dyna_book_comment_reply`
+        where dyna_book_comment_id = #{dynaBookCommentId}
+        and is_del = 0 and is_sensitive=0
+    </select>
+
+</mapper>

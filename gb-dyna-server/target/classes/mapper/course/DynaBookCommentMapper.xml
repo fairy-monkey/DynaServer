@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geeboo.dyna.server.mapper.course.IDynaCourseCommentMapper">
+    <resultMap id="dtoMap" type="com.geeboo.dyna.server.client.dto.course.DynaCourseCommentDTO">
+        <id column="dyna_course_comment_id" jdbcType="INTEGER" property="dynaCourseCommentId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="num_reply" jdbcType="INTEGER" property="numReply"/>
+        <result column="num_favor" jdbcType="INTEGER" property="numFavor"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="comment_content" jdbcType="VARCHAR" property="commentContent"/>
+        <result column="index_no" jdbcType="TINYINT" property="indexNo"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="modify_time" jdbcType="BIGINT" property="modifyTime"/>
+        <result column="modify_by" jdbcType="INTEGER" property="modifyBy"/>
+
+        <result column="is_sensitive" jdbcType="INTEGER" property="isSensitive"/>
+    </resultMap>
+
+
+    <resultMap id="listDtoMap" type="com.geeboo.dyna.server.client.dto.course.DynaCourseCommentListDTO">
+        <id column="dyna_course_comment_id" jdbcType="INTEGER" property="dynaCourseCommentId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="num_reply" jdbcType="INTEGER" property="numReply"/>
+        <result column="num_favor" jdbcType="INTEGER" property="numFavor"/>
+        <result column="comment_content" jdbcType="VARCHAR" property="commentContent"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="is_sensitive" jdbcType="INTEGER" property="isSensitive"/>
+    </resultMap>
+
+    <select id="findById" resultMap="dtoMap">
+        <![CDATA[
+
+
+        select * from dyna_course_comment  where dyna_course_comment_id = #{dynaCourseCommentId}
+
+
+        ]]>
+    </select>
+
+    <insert id="add" parameterType="com.geeboo.dyna.server.client.dto.course.DynaCourseCommentDTO"
+            useGeneratedKeys="true" keyProperty="dynaCourseCommentId">
+        <![CDATA[
+
+
+        insert into `dyna_course_comment`(
+                `user_id`
+                ,`course_id`
+                ,`num_reply`
+                ,`num_favor`
+                ,`is_del`
+                ,`is_sensitive`
+                ,`comment_content`
+                ,`index_no`
+                ,`create_time`
+                ,`create_by`
+                ,`modify_time`
+                ,`modify_by`
+                )values(
+                #{userId}
+                ,#{courseId}
+                ,#{numReply}
+                ,#{numFavor}
+                ,#{isDel}
+                ,#{isSensitive}
+                ,#{commentContent}
+                ,#{indexNo}
+                ,#{createTime}
+                ,#{createBy}
+                ,#{modifyTime}
+                ,#{modifyBy}
+                )
+
+
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="com.geeboo.dyna.server.client.dto.course.DynaCourseCommentDTO">
+        <![CDATA[
+
+
+        update `dyna_course_comment` set
+                            `user_id`=#{userId}
+                ,            `course_id`=#{courseId}
+                ,            `num_reply`=#{numReply}
+                ,            `num_favor`=#{numFavor}
+                ,            `is_del`=#{isDel}
+                ,            `is_sensitive`=#{isSensitive}
+                ,            `comment_content`=#{commentContent}
+                ,            `index_no`=#{indexNo}
+                ,            `create_time`=#{createTime}
+                ,            `create_by`=#{createBy}
+                ,            `modify_time`=#{modifyTime}
+                ,            `modify_by`=#{modifyBy}
+                where dyna_course_comment_id=#{dynaCourseCommentId}
+
+
+        ]]>
+    </update>
+
+    <delete id="deleteDynaCourseComment">
+        <![CDATA[
+
+
+        delete from `dyna_course_comment` where dyna_course_comment_id=#{id}
+
+
+        ]]>
+    </delete>
+
+    <select id="query" resultMap="dtoMap" parameterType="com.geeboo.dyna.server.client.dto.course.DynaCourseCommentDTO">
+        select `dyna_course_comment_id`
+        ,`user_id`
+        ,`course_id`
+        ,`num_reply`
+        ,`num_favor`
+        ,`is_del`
+        ,`is_sensitive`
+        ,`comment_content`
+        ,`index_no`
+        ,`create_time`
+        ,`create_by`
+        ,`modify_time`
+        ,`modify_by`
+        from `dyna_course_comment`
+        <where>
+            <if test="userId != null  and '' != userId  ">
+                user_id = #{userId}
+            </if>
+            <if test="isSensitive != null ">
+                and is_sensitive = #{isSensitive}
+            </if>
+            <if test="courseId != null  and '' != courseId  ">
+                and course_id = #{courseId}
+            </if>
+            <if test="numReply != null  and '' != numReply  ">
+                and num_reply = #{numReply}
+            </if>
+            <if test="numFavor != null  and '' != numFavor  ">
+                and num_favor = #{numFavor}
+            </if>
+        </where>
+        order by `dyna_course_comment_id` desc
+    </select>
+
+    <select id="getCommentByCourseAndLastId" resultMap="listDtoMap">
+        select `dyna_course_comment_id`
+        ,`user_id`
+        ,`course_id`
+        ,`num_reply`
+        ,`num_favor`
+        ,`comment_content`
+        ,`create_time`
+        from `dyna_course_comment` t
+        where course_id = #{courseId} and is_del = 0
+        <if test="userId != null  and 0 != userId  ">
+            <![CDATA[ and not EXISTS ( SELECT 1 from `dyna_course_comment` where user_id <> #{userId} and is_sensitive=1 and dyna_course_comment_id=t.dyna_course_comment_id ) ]]>
+        </if>
+        <if test="lastId != null  and 0 != lastId  ">
+            <![CDATA[ and dyna_course_comment_id < #{lastId}]]>
+        </if>
+        order by t.`dyna_course_comment_id` desc limit #{pageSize}
+    </select>
+
+    <select id="getCommentDetail" resultMap="listDtoMap">
+        select `dyna_course_comment_id`
+        ,`user_id`
+        ,`course_id`
+        ,`num_reply`
+        ,`num_favor`
+        ,`comment_content`
+        ,`create_time`
+        from `dyna_course_comment`
+        where dyna_course_comment_id = #{id}
+    </select>
+
+    <select id="getRecentCommentUserList" resultMap="dtoMap">
+        select max(dyna_course_comment_id) as dyna_course_comment_id, user_id
+        from `dyna_course_comment`
+        where course_id = #{courseId}
+        group by user_id order by dyna_course_comment_id desc
+        limit 0, 2
+    </select>
+
+    <select id="getCommentCountGroupByAccount" resultType="java.lang.Long">
+        select count(DISTINCT user_id)
+        from `dyna_course_comment`
+        where course_id = #{courseId}
+    </select>
+
+    <update id="batchUpdateReplyNum" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            <![CDATA[update `dyna_course_comment` set `num_reply`= #{item.numReply} where dyna_course_comment_id = #{item.dynaCourseCommentId}]]>
+        </foreach>
+    </update>
+
+    <update id="batchUpdateFavorNum" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            <![CDATA[update `dyna_course_comment` set `num_favor`= #{item.numFavor} where dyna_course_comment_id = #{item.dynaCourseCommentId}]]>
+        </foreach>
+    </update>
+</mapper>
