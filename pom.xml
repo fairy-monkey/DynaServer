@@ -32,7 +32,7 @@
         <isSkip>false</isSkip>
     </properties>
 
-    <distributionManagement>
+    <!--<distributionManagement>
         <repository>
             <id>releases</id>
             <name>Nexus Releases Repository</name>
@@ -43,7 +43,7 @@
             <name>Nexus Snapshots Repository</name>
             <url>http://192.168.10.183:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
-    </distributionManagement>
+    </distributionManagement>-->
 
     <dependencyManagement>
         <dependencies>
